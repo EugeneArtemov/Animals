@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: Animals
+
+  profiles:
+    active: default
+  cloud:
+    config:
+      uri: http://localhost:8060/
