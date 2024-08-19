@@ -8,4 +8,5 @@ import java.util.List;
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
     List<Animal> findByStatus(String status);
     void deleteById(Long id);
+    List<Animal> findAllByStatusNot(String status);
 }

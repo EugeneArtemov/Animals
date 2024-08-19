@@ -54,14 +54,19 @@ public class AnimalService {
         return animalMapper.toDto(animalRepository.save(animal));
     }
 
-    public AnimalDto updateAnimalStatus(Long id, String newStatus) {
-        Animal animal = animalRepository.findById(id).orElse(null);
-        if (animal == null) {
+    public List<AnimalDto> updateAnimalStatus(String newStatus) {
+        List<Animal> animalsToUpdate = animalRepository.findAllByStatusNot("sick");
+
+        if (animalsToUpdate.isEmpty()) {
             return null;
         }
-        animal.setStatus(newStatus);
-        Animal updatedAnimal = animalRepository.save(animal);
-        return animalMapper.toDto(updatedAnimal);
+
+        animalsToUpdate.forEach(animal -> animal.setStatus(newStatus));
+        animalRepository.saveAll(animalsToUpdate);
+
+        return animalsToUpdate.stream()
+            .map(animalMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     @Transactional

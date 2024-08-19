@@ -38,16 +38,6 @@ public class AnimalController {
         return animalService.getAllAnimalHistory();
     }
 
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<AnimalDto> updateAnimalStatus(@PathVariable Long id, @RequestBody
-    Map<String, String> statusUpdate) {
-        String newStatus = statusUpdate.get("status");
-        AnimalDto updatedAnimal = animalService.updateAnimalStatus(id, newStatus);
-        if (updatedAnimal == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedAnimal);
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AnimalDto> getAnimalById(@PathVariable Long id) {
@@ -59,6 +49,16 @@ public class AnimalController {
     @PostMapping
     public AnimalDto addAnimal(@RequestBody AnimalDto animalDto) {
         return animalService.addAnimal(animalDto);
+    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<List<AnimalDto>> updateAnimalStatus(@RequestBody Map<String, String> statusUpdate) {
+        String newStatus = statusUpdate.get("status");
+        List<AnimalDto> updatedAnimals = animalService.updateAnimalStatus(newStatus);
+        if (updatedAnimals == null || updatedAnimals.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedAnimals);
     }
 
     @DeleteMapping("/{id}")
