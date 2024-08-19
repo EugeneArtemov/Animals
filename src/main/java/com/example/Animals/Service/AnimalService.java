@@ -54,6 +54,16 @@ public class AnimalService {
         return animalMapper.toDto(animalRepository.save(animal));
     }
 
+    public AnimalDto updateAnimalStatus(Long id, String newStatus) {
+        Animal animal = animalRepository.findById(id).orElse(null);
+        if (animal == null) {
+            return null;
+        }
+        animal.setStatus(newStatus);
+        Animal updatedAnimal = animalRepository.save(animal);
+        return animalMapper.toDto(updatedAnimal);
+    }
+
     @Transactional
     public void removeAnimal(Long id, String reason, String description) {
         Animal animal = animalRepository.findById(id)

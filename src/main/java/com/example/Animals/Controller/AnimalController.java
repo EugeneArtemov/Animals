@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/animals")
@@ -36,6 +38,16 @@ public class AnimalController {
         return animalService.getAllAnimalHistory();
     }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<AnimalDto> updateAnimalStatus(@PathVariable Long id, @RequestBody
+    Map<String, String> statusUpdate) {
+        String newStatus = statusUpdate.get("status");
+        AnimalDto updatedAnimal = animalService.updateAnimalStatus(id, newStatus);
+        if (updatedAnimal == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedAnimal);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AnimalDto> getAnimalById(@PathVariable Long id) {
